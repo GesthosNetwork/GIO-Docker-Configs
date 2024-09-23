@@ -1,0 +1,191 @@
+version: '3.9'
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.10.3.0/24
+          gateway: 172.10.3.254
+
+x-common-service: &common-service
+    image: debian:11
+    restart: on-failure
+    volumes:
+      - ./server:/opt/hk4e
+    environment:
+      LD_LIBRARY_PATH: /usr/local/lib:../lib
+    stop_grace_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '${CPU_LIMIT}'
+        reservations:
+          cpus: '${CPU_LIMIT}'
+
+services:
+  mysql:
+    image: mariadb:10.9
+    container_name: mysql
+    restart: always
+    networks:
+      default:
+        ipv4_address: 172.10.3.100
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - ./database/mysql:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    networks:
+      default:
+        ipv4_address: 172.10.3.101
+    volumes:
+      - ./database/redis:/data
+    command: redis-server --requirepass GenshinImpactOffline
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    depends_on:
+      - mysql
+    networks:
+      default:
+        ipv4_address: 172.10.3.105
+    ports:
+      - 8087:80
+    environment:
+      PMA_HOST: mysql
+
+  gateserver:
+    <<: *common-service
+    container_name: gateserver
+    networks:
+      default:
+        ipv4_address: 172.10.3.1
+    expose:
+      - "${OUTER_IP}:21081:21081/udp"
+    ports:
+      - "${OUTER_IP}:21081:21081/udp"
+    depends_on:
+      - dbgate
+    working_dir: /opt/hk4e/gateserver
+    command: ./gateserver -i 1003.1.1.1
+
+  gameserver:
+    <<: *common-service
+    container_name: gameserver
+    networks:
+      default:
+        ipv4_address: 172.10.3.2
+    expose:
+      - 21111/udp
+    depends_on:
+      - dbgate
+      - nodeserver
+      - gateserver
+    working_dir: /opt/hk4e/gameserver
+    command: ./gameserver -i 1003.2.2.1
+
+  nodeserver:
+    <<: *common-service
+    container_name: nodeserver
+    networks:
+      default:
+        ipv4_address: 172.10.3.3
+    expose:
+      - 21121/udp
+    depends_on:
+      - mysql
+      - redis
+    working_dir: /opt/hk4e/nodeserver
+    command: ./nodeserver -i 1003.3.3.1
+
+  dbgate:
+    <<: *common-service
+    container_name: dbgate
+    networks:
+      default:
+        ipv4_address: 172.10.3.4
+    depends_on:
+      - mysql
+      - redis
+      - nodeserver
+    working_dir: /opt/hk4e/dbgate
+    command: ./dbgate -i 1003.4.4.1
+
+  dispatch:
+    <<: *common-service
+    container_name: dispatch
+    networks:
+      default:
+        ipv4_address: 172.10.3.5
+    expose:
+      - 21061/udp
+      - 21041
+    depends_on:
+      - mysql
+      - redis
+    working_dir: /opt/hk4e/dispatch
+    command: ./dispatch -i 1003.5.5.1
+
+  muipserver:
+    <<: *common-service
+    container_name: muipserver
+    networks:
+      default:
+        ipv4_address: 172.10.3.6
+    expose:
+      - "${OUTER_IP}:21051:21051"
+    depends_on:
+      - dbgate
+      - nodeserver
+    working_dir: /opt/hk4e/muipserver
+    command: ./muipserver -i 1003.6.6.1
+
+  multiserver:
+    <<: *common-service
+    container_name: multiserver
+    profiles:
+      - donotstart
+    networks:
+      default:
+        ipv4_address: 172.10.3.7
+    depends_on:
+      - dbgate
+      - nodeserver
+    working_dir: /opt/hk4e/multiserver
+    command: ./multiserver -i 1003.7.7.1
+
+  pathfindingserver:
+    <<: *common-service
+    container_name: pathfindingserver
+    profiles:
+      - donotstart
+    networks:
+      default:
+        ipv4_address: 172.10.3.8
+    expose:
+      - 21101/udp
+    depends_on:
+      - mysql
+      - redis
+    working_dir: /opt/hk4e/pathfindingserver
+    command: ./pathfindingserver -i 1003.8.8.1
+
+  sdkserver:
+    build:
+      context: ./server/sdkserver
+    image: hk4e/sdk
+    container_name: sdkserver
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: 172.10.3.253
+    ports:
+      - "${OUTER_IP}:21000:80"
+    volumes:
+      - ./server/sdkserver:/app
