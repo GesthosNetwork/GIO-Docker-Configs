@@ -10,7 +10,7 @@ What are the benefits of playing this old version? You can relive some of the mo
 - Download [server data][4] (json, lua, txt, xml, version.txt) and place it in the `server/data` folder.
 - Download [sdkserver][5] and place it in the `server/sdkserver` folder.
 - Download [Game Patch][6]
-- Download [FurinaImpact.Proxy][7]
+- Download [FireflySR.Proxy][7]
 
 ### System Setup:
 1. **Enable WSL (Windows Subsystem for Linux)**:
@@ -20,7 +20,7 @@ What are the benefits of playing this old version? You can relive some of the mo
 
 2. **Update WSL**:
    - Open a terminal and run:
-     ```bash
+     ```
      wsl --update
      ```
 
@@ -33,10 +33,10 @@ What are the benefits of playing this old version? You can relive some of the mo
    - Wait approximately 15 minutes for the server to debug and be ready.
 
 3. **Apply Game Patch**:
-   - Place the downloaded game patch into the same folder as the game's executable file (.exe).
+   - See readme.txt for instruction.
 
-4. **Run FurinaImpact.Proxy**:
-   - Set the port to `21000`.
+4. **Run FireflySR.Proxy**:
+   - Open config.json, set DestinationPort to `21000`.
 
 5. **Playing the Game**:
    - You can now enjoy the game.
@@ -54,10 +54,10 @@ What are the benefits of playing this old version? You can relive some of the mo
 - Password: (check the `.env` file for the password).
 
 [1]: https://www.docker.com  
-[2]: https://github.com/GesthosNetwork/GI-Game-Client/tree/main/PC%20Client 
+[2]: https://github.com/GesthosNetwork/GI-Game-Client
 [3]: https://www.mediafire.com/folder/euuny06zqca27  
 [4]: https://www.mediafire.com/folder/9vc51iejddzj5  
 [5]: https://www.mediafire.com/folder/y7lmv16up22vw  
 [6]: https://github.com/GesthosNetwork/GI-Patches-Collection  
-[7]: https://github.com/GesthosNetwork/FurinaImpact.Proxy/releases/download/v1.0.0/FurinaImpact.Proxy.zip  
+[7]: https://github.com/GesthosNetwork/FireflySR.Proxy/releases/download/v2.0.0/FireflySR.Proxy.zip 
 [8]: https://autopatchhkbeta.yuanshen.com/client_app/download/beta_pc/20220708104232_lwGnJdsYwFVCZDTT/GenshinImpact_2.8.50_beta.zip

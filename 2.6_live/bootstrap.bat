@@ -1,4 +1,5 @@
 @echo off
+
 if exist .bootstrap.lock (
 	color C
 	echo Error: Installation has already been completed.
@@ -8,24 +9,19 @@ if exist .bootstrap.lock (
 	exit /b 1
 )
 
-if exist docker-compose.yml (
-	docker compose kill
-	docker compose rm -f
-)
+docker compose down
 
 rd /s /q database\redis database\mysql
 
-docker network prune -f
+docker system prune -f
 
-docker compose -f docker-preinstall.yml up preparevars
-docker compose -f docker-preinstall.yml kill preparevars
-docker compose -f docker-preinstall.yml rm -f preparevars
+docker compose -f docker-preinstall.yml up initvar
+docker compose -f docker-preinstall.yml down
 
-docker compose up -d mysql redis phpmyadmin
+docker compose up --build -d mysql redis phpmyadmin
 
-docker compose -f docker-preinstall.yml up preparedb
-docker compose -f docker-preinstall.yml kill preparedb
-docker compose -f docker-preinstall.yml rm -f preparedb
+docker compose -f docker-preinstall.yml up initdb
+docker compose -f docker-preinstall.yml down
 
 echo. > .bootstrap.lock
 

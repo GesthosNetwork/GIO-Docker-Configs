@@ -12,15 +12,20 @@ SET `end_time` = ADDTIME(@NOW, TIMEDIFF(`end_time`, `begin_time`)),
 
 UPDATE `t_gacha_schedule_config` 
 SET `begin_time` = @NOW 
-WHERE `gacha_type` IN (301, 302, 400) 
-  AND `enabled` = 1;
+WHERE `schedule_id` IN (31);
 
 UPDATE `t_gacha_schedule_config` 
-SET `begin_time` = ADDDATE(@NOW, INTERVAL '21 00:00:01' DAY_SECOND) 
-WHERE `gacha_type` IN (301, 302, 400) 
-  AND `enabled` = 0;
+SET `begin_time` = ADDDATE(@NOW, INTERVAL '28 00:00:01' DAY_SECOND) 
+WHERE `schedule_id` IN (32);
 
 UPDATE `t_gacha_schedule_config` 
-SET `end_time` = ADDDATE(`begin_time`, INTERVAL 21 DAY), 
-    `enabled` = 1 
-WHERE `gacha_type` IN (301, 302, 400);
+SET `begin_time` = ADDDATE(@NOW, INTERVAL '42 00:00:02' DAY_SECOND) 
+WHERE `schedule_id` IN (33);
+
+UPDATE `t_gacha_schedule_config` 
+SET `end_time` = ADDDATE(`begin_time`, INTERVAL 14 DAY) 
+WHERE `schedule_id` IN (31, 32, 33);
+
+UPDATE `t_gacha_schedule_config` 
+SET `end_time` = ADDDATE(`begin_time`, INTERVAL 21 DAY) 
+WHERE `schedule_id` IN (34, 35);

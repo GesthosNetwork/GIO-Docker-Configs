@@ -1,5 +1,3 @@
-version: '3.9'
-
 networks:
   default:
     ipam:
@@ -8,18 +6,18 @@ networks:
           gateway: 172.10.3.254
 
 services:
-  preparevars:
-    build: ./dockerfiles/prepare-vars
+  initvar:
+    build: ./dockerfiles/init-var
     networks:
       default:
         ipv4_address: 172.10.3.242
     volumes:
       - .:/app
 
-  preparedb:
-      build: ./dockerfiles/prepare-db
-      networks:
-        default:
-          ipv4_address: 172.10.3.241
-      volumes:
-        - .:/app
+  initdb:
+    build: ./dockerfiles/init-db
+    networks:
+      default:
+        ipv4_address: 172.10.3.241
+    volumes:
+      - .:/app

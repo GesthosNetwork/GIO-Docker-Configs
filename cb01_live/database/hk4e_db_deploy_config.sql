@@ -116,10 +116,10 @@ CREATE TABLE `t_region_config` (
   `region_custom_config_str` varchar(512) NOT NULL DEFAULT '' COMMENT '客户端自定义配置，如果和client_config有字段冲突，则以client表为准',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `t_region_config` (`id`, `name`, `title`, `region_type`, `area_type`, `dispatch_url`, `muipserver_url`, `account_url`, `account_url_bak`, `sdk_env`, `account_inner_url`, `pay_callback_url`, `resource_url`, `resource_url_bak`, `data_url`, `data_url_bak`, `feedback_url`, `bulletin_url`, `handbook_url`, `stop_server_config_str`, `stop_register_config_str`, `region_custom_config_str`) VALUES
-(2,	@region, @region, 'DEV_PUBLIC', 'global', CONCAT('http://', @base_url, '/query_region/', @region), 'http://172.10.3.6:21051/api',	'',	'',	2,	'',	'http://172.10.3.9:21091/recharge',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'');
+(1,	@region, @region, 'DEV_PUBLIC', 'global', CONCAT('http://', @base_url, '/query_region/', @region), 'http://172.10.3.6:21051/api',	'',	'',	2,	'',	'http://172.10.3.9:21091/recharge',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'');
 
 
 SET foreign_key_checks = 1;
