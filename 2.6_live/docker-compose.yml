@@ -54,7 +54,7 @@ services:
       default:
         ipv4_address: 172.10.3.105
     ports:
-      - 8087:80
+      - "${OUTER_IP}:8087:80"
     environment:
       PMA_HOST: mysql
 
@@ -137,6 +137,8 @@ services:
       default:
         ipv4_address: 172.10.3.6
     expose:
+      - 21051
+    ports:
       - "${OUTER_IP}:21051:21051"
     depends_on:
       - dbgate
@@ -147,6 +149,8 @@ services:
   multiserver:
     <<: *common-service
     container_name: multiserver
+    profiles:
+      - donotstart
     networks:
       default:
         ipv4_address: 172.10.3.7

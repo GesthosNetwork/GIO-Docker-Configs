@@ -19,7 +19,7 @@ CREATE TABLE `t_area_config` (
 
 INSERT INTO `t_area_config` (`area_type`, `business`, `business_cn`) VALUES
 ('global', 'hk4e_global', ''),
-('cn', 'hk4e_cn',  '');
+('cn', 'hk4e_cn', '');
 
 
 CREATE TABLE `t_authkey_config` (

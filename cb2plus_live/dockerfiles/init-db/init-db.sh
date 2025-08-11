@@ -12,13 +12,14 @@ echo "Using mysqladmin to ping..."
 
 while ! mysqladmin ping --host 172.10.3.100 -u root -p"$MYSQL_PASSWORD" --connect-timeout 3; do
   echo "Waiting for MySQL to start up..."
-  sleep 3
+  sleep 60
 done
 
 echo "Importing..."
-mysql -h172.10.3.100 -u root -p"$MYSQL_PASSWORD" < database/hk4e_db_setup.sql
+mysql -h172.10.3.100 -u root -p"$MYSQL_PASSWORD" < database/hk4e_db_privilege.sql
 
-for sql_file in hk4e_db_config.sql hk4e_db_deploy_config.sql hk4e_db_user.sql; do
+for sql_file in hk4e_db_config.sql hk4e_db_deploy_config.sql hk4e_db_order.sql hk4e_db_user.sql hk4e_db_adjust.sql; do
+  [ -f database/$sql_file ] || continue
   mysql -h172.10.3.100 -u hk4e_work -pGenshinImpactOffline < database/$sql_file
 done
 

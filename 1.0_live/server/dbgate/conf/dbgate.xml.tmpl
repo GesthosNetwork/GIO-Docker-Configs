@@ -21,12 +21,12 @@
     <!-- 网络配置 -->
     <NetConf>
         <NodeserverClientConf>
-            <RecvBufLen   value="600" />
+            <RecvBufLen value="600" />
             <MaxSendPacketLen value="1024" />
             <KeepAliveSec value="10" />
-            <TimeoutSec   value="30" />
-            <CutPacket    value="1" />
-            <ThreadNum    value="1" />
+            <TimeoutSec value="30" />
+            <CutPacket value="1" />
+            <ThreadNum value="1" />
             <ConnectList>
                 <Connect app_id="1003.3.3.1" ip="172.10.3.3" port="21121"/>
             </ConnectList>
@@ -134,7 +134,7 @@
     </RedisConf>
 
     <!-- 分区配置 -->
-    <RegionConf name="dev_gio" dev_sdk_account="false" max_register="" check_login_black_ip="true" check_register_black_ip="true" />
+    <RegionConf name="dev_gio" dev_sdk_account="true" max_register="" check_login_black_ip="true" check_register_black_ip="true" />
 
     <ServiceList>
         <Dbgate name="dbgate" thread_num="2" stat_log_level="" 
